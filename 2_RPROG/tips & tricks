@@ -1,0 +1,12 @@
+##compare a vector to a list of values
+is.element()
+
+##subseting specific list of columns from a data frame
+subset()
+dataframe[c(1,2,7)]
+
+##changing the colnames of a specific column/list of columns/all columns
+colnames(dataframe)[2] <- "column 3"
+colnames(dataframe)[c(1,3,5)] <- c("Col 1","Col 3","Col 5")
+colnames(dataframe)<-c("c1","c2","c3","c4","c5")
+
