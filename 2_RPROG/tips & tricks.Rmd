@@ -1,12 +1,61 @@
-## Compare a vector to a list of values
-is.element()
+#### Compare a variable to a list of values
+* find if a vlaue exists in a vector:
+```{r}
 
-## Subseting specific list of columns from a data frame
-subset()
-dataframe[c(1,2,7)]
+vec1 <- c(1,2,3,"abc","hab",123)
+x <- 2
+print(is.element(x,vec1))
+[1] TRUE
 
-## Changing the colnames of a specific column/list of columns/all columns
+x <- 4
+print(is.element(x,vec1))
+[1] FALSE
+
+x <- c("abc",4)
+print(is.element(x,vec1))
+[1]  TRUE FALSE
+```
+
+
+#### Subseting specific list of columns from a data frame
+* subset()
+```{r}
+df <- read.csv("file.csv")
+colnames(df)
+[1] "c1" "c2" "c3" "c4" "c5"
+
+sub_df <- subset(
+                  df,c1 == "abc" & !is.na(complete.cases(df[c2]),
+                    select =c("c1","c2","c4"))
+# this command will return specific columns of the df dataframe based on some conditions
+# first the value in c1 should be equal to "abc"
+# second the value in c2 should not be NA .. c2 should have value.
+# if both conditions match then return the columns specified in the select statemnet 
+# if select not used will return all columns
+
+```
+#### Changing the names of a specific column/list of columns/all columns
+```{r}
 colnames(dataframe)[2] <- "column 3"
 colnames(dataframe)[c(1,3,5)] <- c("Col 1","Col 3","Col 5")
 colnames(dataframe)<-c("c1","c2","c3","c4","c5")
+```
+#### Stop the warning message temporarly during the coercion process to avoid NA warnings 
+
+* there are two options:
+* option (1)
+```{r}
+#disable the warning message temporarly
+options(warn = -1)
+outcome_file[,outcome] <- as.numeric(outcome_file[,outcome])
+# enabling the warning messages again
+options(warn = 0)
+```
+* option (2)
+```{r}
+suppressWarnings(outcome_file[,outcome] <- as.numeric(outcome_file[,outcome]))
+```
+#### Appending to a vector
+#### loading a Vector into a Matrix by row.
+#### invisible
 
