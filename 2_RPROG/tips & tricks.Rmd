@@ -58,4 +58,5 @@ suppressWarnings(outcome_file[,outcome] <- as.numeric(outcome_file[,outcome]))
 #### Appending to a vector
 #### loading a Vector into a Matrix by row.
 #### invisible
+#### time functions
 
