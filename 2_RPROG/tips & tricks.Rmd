@@ -54,7 +54,15 @@ options(warn = 0)
 * option (2)
 ```{r}
 suppressWarnings(outcome_file[,outcome] <- as.numeric(outcome_file[,outcome]))
+
 ```
+#### using which in subseting
+
+x[which(x$var2 >8), ] = returns the rows where the second column value is larger than 8
+
+    **Note*: which(condition) = useful in dealing with NA values as it returns the indices of the values where the condition holds true (returns FALSE for NA) *
+
+
 #### Appending to a vector
 #### loading a Vector into a Matrix by row.
 #### invisible
