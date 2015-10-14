@@ -27,8 +27,8 @@ $\pagebreak$
 
 ```{r fig.height = 3, fig.width = 4, fig.align='center', echo=FALSE}
 # install grid and png packages if not present
-library(png)
-library(grid)
+if (!require("pacman")) install.packages("pacman")
+p_load("png", "grid")
 grid.raster(readPNG("figures/1.jpg"))
 ```
 
@@ -101,7 +101,8 @@ grid.raster(readPNG("figures/5.jpg"))
 ```
 
 ```{r fig.height = 3, fig.width = 4, fig.align='center', message = F, warning = F, echo=FALSE}
-library(UsingR); data(galton)
+p_load("UsingR")
+data(galton)
 plot(jitter(child, 4)~parent, galton)
 ```
 
@@ -167,7 +168,7 @@ grid.raster(readPNG("figures/6.jpg"))
 
 ### Base Plot Example
 ```{r fig.height = 4, fig.width = 6, fig.align='center'}
-library(datasets)
+p_load("datasets")
 # type =“n” sets up the plot and does not fill it with data
 with(airquality, plot(Wind, Ozone, main = "Ozone and Wind in New York City", type = "n"))
 # subsets of data are plotted here using different colors
@@ -252,7 +253,7 @@ dev.off()
 $\pagebreak$
 
 ## `lattice` Plotting System
-* `library(lattice)` = load lattice system
+* `p_load("lattice")` = load lattice system
 * implemented using the `lattice` and `grid` packages
 	* `lattice` package = contains code for producing ***Trellis*** graphics (independent from base graphics system)
 	* `grid` package = implements the graphing system; lattice build on top of grid
@@ -297,7 +298,7 @@ $\pagebreak$
 
 ### `lattice` Example
 ```{r fig.height = 4, fig.width = 6, fig.align='center'}
-library(lattice)
+p_load("lattice")
 set.seed(10)
 x <- rnorm(100)
 f <- rep(0:1, each = 50)
@@ -318,7 +319,7 @@ xyplot(y ~ x | f, panel = function(x, y, ...) {
 $\pagebreak$
 
 ## `ggplot2` Plotting System
-* `library(ggplot2)` = loads ggplot2 package
+* `p_load("ggplot2")` = loads ggplot2 package
 * implementation of Grammar of Graphics by Leland Wilkinson, written by Hadley Wickham (created RStudio)
 
 > "In brief, the grammar tells us that a statistical graphic is a mapping from data to aesthetic attributes (color, shape, size) of geometric objects (points, lines, bars). The plot may also contain statistical transformations of the data and is drawn on a specific coordinate system"
@@ -347,7 +348,7 @@ $\pagebreak$
 	* ***example***
 
 ```{r fig.height = 3, fig.width = 4, fig.align='center', message = F, warning = F}
-library(ggplot2)
+p_load("ggplot2")
 qplot(displ, hwy, data = mpg, color = drv, shape = drv)
 ```
 
@@ -783,7 +784,13 @@ plot(svd2$v[,2],pch=19,xlab="Column",ylab="Second right singular vector",
 			+ `k=10` = default value (take the nearest 10 rows)
 
 ```{r fig.height=3,fig.width=5, fig.align='center'}
-library(impute)  ## Available from http://bioconductor.org
+## The "impute" library is available from http://bioconductor.org
+## biocLite() is the recommended way to install Bioconductor packages.
+## If the "impute" library is not already installed, you can uncomment
+## the following lines to install it from Bioconductor.
+#source("http://bioconductor.org/biocLite.R")
+#biocLite(c("impute")) # install "impute" library
+library(impute) 
 data2 <- dataOrdered
 # set random samples = NA
 data2[sample(1:100,size=40,replace=FALSE)] <- NA
@@ -875,7 +882,7 @@ plot(x, y, col = rgb(0, 0, 0, 0.2), main = "With Transparency")
 
 ### `RColorBrewer` Package
 * can be found on CRAN that has predefined color palettes
-	* `library(RColorBrewer)`
+	* `p_load("RColorBrewer")`
 * **types of palettes**
 	- *Sequential* = numerical/continuous data that is ordered from low to high
 	- *Diverging* = data that deviate from a value, increasing in two directions (i.e. standard deviations from the mean)
@@ -895,7 +902,7 @@ grid.raster(readPNG("figures/color.png"))
 * ***example***
 
 ```{r fig.height = 3, fig.width = 7, fig.align='center'}
-library(RColorBrewer)
+p_load("RColorBrewer")
 # generate 3 colors using brewer.pal function
 cols <- brewer.pal(3, "BuGn")
 pal <- colorRampPalette(cols)

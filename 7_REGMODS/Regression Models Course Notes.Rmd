@@ -2,11 +2,11 @@
 title: "Regression Models Course Notes"
 author: "Xing Su"
 output:
+  html_document:
+    toc: yes
   pdf_document:
     toc: yes
     toc_depth: 3
-  html_document:
-    toc: yes
 header-includes: \usepackage{graphicx} \usepackage{color} \usepackage{mathtools}
 ---
 $\pagebreak$
@@ -84,8 +84,10 @@ $\pagebreak$
 	* ***Note**: `manipulate` function can help to show this *
 
 ```{r fig.height = 2.5, fig.width = 7, message = FALSE, fig.align = 'center'}
-# load necessary packages/install if needed
-library(ggplot2); library(UsingR); data(galton)
+# install grid and png packages if not present
+if (!require("pacman")) install.packages("pacman")
+p_load("ggplot2", "UsingR")
+data(galton)
 # function to plot the histograms
 myHist <- function(mu){
 	# calculate the mean squares
@@ -99,7 +101,7 @@ myHist <- function(mu){
     g
 }
 # manipulate allows the user to change the variable mu to see how the mean squares changes
-#   library(manipulate); manipulate(myHist(mu), mu = slider(62, 74, step = 0.5))]
+#   p_load("manipulate"); manipulate(myHist(mu), mu = slider(62, 74, step = 0.5))]
 # plot the correct graph
 myHist(mean(galton$child))
 ```
@@ -109,7 +111,7 @@ myHist(mean(galton$child))
 * ***Note**: because there are multiple data points for the same parent/child combination, a third dimension (size of point) should be used when constructing the scatter plot *
 
 ```{r fig.height = 3.5,fig.width = 5, fig.align='center', message = FALSE}
-library(dplyr)
+p_load("dplyr")
 # constructs table for different combination of parent-child height
 freqData <- as.data.frame(table(galton$child, galton$parent))
 names(freqData) <- c("child (in)", "parent (in)", "freq")
@@ -163,7 +165,8 @@ $\pagebreak$
 
 ```{r fig.height = 2.5, fig.width = 3, fig.align='center', echo=FALSE, message = FALSE}
 # install grid and png packages if not present
-library(png); library(grid); doMC::registerDoMC(cores = 4)
+p_load("png", "grid", "doMC")
+doMC::registerDoMC(cores = 4)
 grid.raster(readPNG("figures/1.png"))
 ```
 
@@ -1017,7 +1020,9 @@ coef(lm(y ~ x + x2 + x3))
 
 ```{r fig.height=6.5, fig.width=7, fig.align = 'center', warning = F, message = F}
 # load dataset
-require(datasets); data(swiss); require(GGally)
+p_load("datasets")
+data(swiss)
+p_load("GGally")
 # produce pairwise plot using ggplot2
 ggpairs(swiss, lower = list(continuous = "smooth"),params = c(method = "loess"))
 # print coefficients of regression of fertility on all predictors
@@ -2030,7 +2035,7 @@ c(summary(fit2)$cov.unscaled[2,2], summary(fit3)$cov.unscaled[2,2]) / a - 1
 
 ```{r message = F, warning = F}
 # load car library
-library(car)
+p_load("car")
 # run linear regression on Fertility vs all other predictors
 fit <- lm(Fertility ~ . , data = swiss)
 # calculate the variance inflation factors
@@ -2301,7 +2306,7 @@ g(\mu_i) & = \log \left(\frac{\mu_i}{1 - \mu_i} \right) = \eta_i\\
 ```r
 # set x values for the points to be plotted
 x <- seq(-10, 10, length = 1000)
-# "library(manipulate)" is needed to use the manipulate function
+# "p_load("manipulate")" is needed to use the manipulate function
 manipulate(
 	# plot the logistic regression curve
     plot(x, exp(beta0 + beta1 * x) / (1 + exp(beta0 + beta1 * x)),
@@ -2517,7 +2522,7 @@ plot(glm1$fitted,glm1$residuals,pch=19,col="grey",ylab="Residuals",xlab="Fitted"
 
 ```{r message = F, warning = F}
 # load sandwich package
-library(sandwich)
+p_load("sandwich")
 # compute
 confint.agnostic <- function (object, parm, level = 0.95, ...)
 {

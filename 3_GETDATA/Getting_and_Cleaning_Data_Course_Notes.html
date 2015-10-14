@@ -80,6 +80,7 @@ img {
 </ul>
 </div>
 
+<p><span class="math">\(\pagebreak\)</span></p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <ul>
@@ -138,6 +139,7 @@ img {
 <li>in addition to script, possibly may need steps to run files, how script is run, and explicit instructions</li>
 </ul></li>
 </ol>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="download-files" class="section level2">
 <h2>Download files</h2>
@@ -186,6 +188,7 @@ img {
 <li><code>XLConnect</code> package has more options for writing/manipulating Excel files</li>
 <li>generally good to store data in database/csv/tab separated files (.tab/.txt), easier to distribute</li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="reading-xml" class="section level2">
 <h2>Reading XML</h2>
@@ -226,9 +229,10 @@ img {
 <li><strong>extract content by attributes</strong>
 <ul>
 <li><code>doc &lt;- htmlTreeParse(url, useInternal = True)</code></li>
-<li><code>scores &lt;- xpathSApply(doc, &quot;//li@class='score'&quot;, xmlvalue)</code> = look for li elements with <code>class = &quot;score&quot;</code> and return their value</li>
+<li><code>scores &lt;- xpathSApply(doc, &quot;//li[@class='score']&quot;, xmlvalue)</code> = look for li elements with <code>class = &quot;score&quot;</code> and return their value</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="reading-json" class="section level2">
 <h2>Reading JSON</h2>
@@ -260,13 +264,14 @@ img {
 <li><code>fromJSON()</code> = converts from JSON object/code back to data frame</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="data.table" class="section level2">
 <h2>data.table</h2>
 <ul>
 <li>inherits from <code>data.frame</code> (external package) <span class="math">\(\rightarrow\)</span> all functions that accept <code>data.frame</code> work on <code>data.table</code></li>
 <li>can be much faster (written in C), <strong><em>much much faster</em></strong> at subsetting/grouping/updating</li>
-<li><strong>syntax</strong>: <code>dt &lt;- data.table(x = rnorm(9), y = rep(c(a, b, c), each = 3), z = rnorm(9)</code></li>
+<li><strong>syntax</strong>: <code>dt &lt;- data.table(x = rnorm(9), y = rep(c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;), each = 3), z = rnorm(9))</code></li>
 <li><code>tables()</code> = returns all data tables in memory
 <ul>
 <li>shows name, nrow, MB, cols, key</li>
@@ -278,7 +283,7 @@ img {
 <li><strong>column subsetting</strong> (modified for <code>data.table</code>)
 <ul>
 <li>argument after comma is called an <strong><em>expression</em></strong> (collection of statements enclosed in <code>{}</code>)</li>
-<li><code>dt[, list(means(x), sum(z)]</code> = returns mean of x column and sum of z column (no <code>&quot;&quot;</code> needed to specify column names, x and z in example)</li>
+<li><code>dt[, list(mean(x), sum(z))]</code> = returns mean of x column and sum of z column (no <code>&quot;&quot;</code> needed to specify column names, x and z in example)</li>
 <li><code>dt[, table(y)]</code> = get table of y value (perform any functions)</li>
 </ul></li>
 <li><strong>add new columns</strong>
@@ -307,12 +312,12 @@ img {
 <li><code>.N</code> = returns integer, length 1, containing the number (essentially count)
 <ul>
 <li><code>dt &lt;- data.table (x=sample(letters[1:3], 1E5, TRUE))</code> = generates data table</li>
-<li><code>dt[, .N by =x]</code> = creates a table to count observations by the value of x</li>
+<li><code>dt[, .N, by =x]</code> = creates a table to count observations by the value of x</li>
 </ul></li>
 </ul></li>
 <li><strong>keys</strong> (quickly filter/subset)
 <ul>
-<li><em>example</em>: <code>dt &lt;- data.table(x = rep(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;), each 100), y = rnorm(300))</code> = generates data table
+<li><em>example</em>: <code>dt &lt;- data.table(x = rep(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;), each = 100), y = rnorm(300))</code> = generates data table
 <ul>
 <li><code>setkey(dt, x)</code> = set the key to the x column</li>
 <li><code>dt['a']</code> = returns a data frame, where x = ‘a’ (effectively filter)</li>
@@ -329,14 +334,15 @@ img {
 </ul></li>
 <li><strong>fast reading of files</strong>
 <ul>
-<li><em>example</em>: <code>big_df &lt;- data.frame(norm(1e6), norm(1e6))</code> = generates data table
+<li><em>example</em>: <code>big_df &lt;- data.frame(rnorm(1e6), rnorm(1e6))</code> = generates data table
 <ul>
 <li><code>file &lt;- tempfile()</code> = generates empty temp file</li>
-<li><code>write.table(big.df, file=file, row.names=FALSE, col.names = TRUE, sep = &quot;\t&quot;. quote = FALSE)</code> = writes the generated data from big.df to the empty temp file</li>
+<li><code>write.table(big_df, file=file, row.names=FALSE, col.names = TRUE, sep = &quot;\t&quot;, quote = FALSE)</code> = writes the generated data from big.df to the empty temp file</li>
 <li><code>fread(file)</code> = read file and load data = much faster than <code>read.table()</code></li>
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="reading-from-mysql" class="section level2">
 <h2>Reading from MySQL</h2>
@@ -345,7 +351,7 @@ img {
 <li>free/widely used open sources database software, widely used for Internet base applications</li>
 <li>each row = record</li>
 <li>data are structured in databases <span class="math">\(\rightarrow\)</span> series tables (dataset) <span class="math">\(\rightarrow\)</span> fields (columns in dataset)</li>
-<li><code>dbConnect(MySQL(), user = &quot;genome&quot;, db = &quot;hg19&quot;, host = &quot;genome-mysql.cse.ucsc.edu)</code> = open a connection to the database
+<li><code>dbConnect(MySQL(), user = &quot;genome&quot;, db = &quot;hg19&quot;, host = &quot;genome-mysql.cse.ucsc.edu&quot;)</code> = open a connection to the database
 <ul>
 <li><code>db = &quot;hg19&quot;</code> = select specific database</li>
 <li><code>MySQL()</code> can be replaced with other arguments to use other data structures</li>
@@ -368,6 +374,7 @@ img {
 <li><code>dbClearResult(query)</code> = clears query from remote database, important</li>
 <li><code>sqldf</code> package example</li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="hdf5" class="section level2">
 <h2>HDF5</h2>
@@ -407,6 +414,7 @@ img {
 <li><code>h5read(&quot;filename&quot;, &quot;group/subgroupname/obj&quot;, index = list(1:3, 1))</code> = writes specified values in the specified obj at the group within the file</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="web-scraping-tutorial" class="section level2">
 <h2>Web Scraping (<a href="http://www.r-bloggers.com/?=Web+Scraping">tutorial</a>)</h2>
@@ -448,6 +456,7 @@ img {
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="working-with-api" class="section level2">
 <h2>Working with API</h2>
@@ -487,6 +496,7 @@ img {
 <li><code>json1[json1$name == &quot;datasharing&quot;,]$created_at</code> = returns the create date for the data sharing repo</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="reading-from-other-sources" class="section level2">
 <h2>Reading from Other Sources</h2>
@@ -537,6 +547,7 @@ img {
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="dplyr" class="section level2">
 <h2>dplyr</h2>
@@ -640,6 +651,7 @@ img {
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="tidyr" class="section level2">
 <h2>tidyr</h2>
@@ -684,6 +696,7 @@ img {
 </ul></li>
 <li><em><strong>Note</strong>: when there are redundant information, it’s better to split up the info into multiple tables; however, each table should also contain primary keys, which identify observations and link data from one table to the next </em></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="lubridate" class="section level2">
 <h2>lubridate</h2>
@@ -717,6 +730,7 @@ img {
 <li><code>with_tz(time, tone =&quot;&quot;)</code> = return date-time in a different time zone</li>
 <li><code>as.period(new_interval(last_time, arrive))</code> = return the properly formatted difference between the two date times</li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="subsetting-and-sorting" class="section level2">
 <h2>Subsetting and Sorting</h2>
@@ -724,7 +738,7 @@ img {
 <li><strong>subsetting</strong>
 <ul>
 <li><code>x &lt;- data.frame(&quot;var1&quot; = sample(1:5), &quot;var2&quot; = sample(6:10), &quot;var3&quot; = (11:15))</code> = initiates a data frame with three names columns</li>
-<li><code>x &lt;- x[sample(1:5)</code> = this scrambles the rows</li>
+<li><code>x &lt;- x[sample(1:5),]</code> = this scrambles the rows</li>
 <li><code>x$var2[c(2,3)] = NA</code> = setting the 2nd and 3rd element of the second column to NA</li>
 <li><code>x[1:2, &quot;var2&quot;]</code> = subsetting the first two row of the the second column</li>
 <li><code>x[(x$var1 &lt;= 3 | x$var3 &gt; 15), ]</code> = return all rows of x where the first column is less than or equal to three or where the third column is bigger than 15</li>
@@ -753,6 +767,7 @@ img {
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="summarizing-data" class="section level2">
 <h2>Summarizing Data</h2>
@@ -823,6 +838,7 @@ img {
 <li><code>print(object.size(obj), units = &quot;Mb&quot;</code> = prints size of object in Mb</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="creating-new-variables" class="section level2">
 <h2>Creating New Variables</h2>
@@ -888,6 +904,7 @@ img {
 <li><code>exp(x)</code> = exponential of x</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="reshaping-data" class="section level2">
 <h2>Reshaping Data</h2>
@@ -936,6 +953,7 @@ img {
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="merging-data" class="section level2">
 <h2>Merging Data</h2>
@@ -957,6 +975,7 @@ img {
 <li><code>dfList = list(df1, df2, df3); join_all(dfList)</code> = joins together a list of data frames using the common columns</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="editing-text-variables" class="section level2">
 <h2>Editing Text Variables</h2>
@@ -1015,6 +1034,7 @@ img {
 </ul></li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="regular-expressions" class="section level2">
 <h2>Regular Expressions</h2>
@@ -1080,6 +1100,7 @@ img {
 <li><em>example</em>: <code>([a-zA-Z]+) +\1 +</code> matches “any word + at least one space + the same word repeated + at least one space” = “night night”, “so so”, etc.</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="working-with-dates" class="section level2">
 <h2>Working with Dates</h2>
@@ -1119,6 +1140,7 @@ img {
 <li><code>?Sys.timezone</code> = documentation on how to determine/set timezones</li>
 </ul></li>
 </ul>
+<p><span class="math">\(\pagebreak\)</span></p>
 </div>
 <div id="data-sources" class="section level2">
 <h2>Data Sources</h2>

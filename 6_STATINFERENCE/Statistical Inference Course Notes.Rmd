@@ -2,13 +2,13 @@
 title: "Statistical Inference Course Notes"
 author: "Xing Su"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: 3
   html_document:
     highlight: pygments
     theme: spacelab
     toc: yes
+  pdf_document:
+    toc: yes
+    toc_depth: 3
   word_document: default
 header-includes: \usepackage{graphicx}
 ---
@@ -45,7 +45,9 @@ $\pagebreak$
 * probability of the **union** of any two sets of outcomes that have nothing in common (mutually exclusive) = sum of respective probabilities
 
 ```{r echo = FALSE, fig.width = 4, fig.height = 3, fig.align = 'center'}
-library(grid);library(png)
+# install grid and png packages if not present
+if (!require("pacman")) install.packages("pacman")
+p_load("png", "grid")
 grid.raster(readPNG("figures/1.png"))
 ```
 
@@ -239,7 +241,9 @@ $\pagebreak$
 
 ```{r fig.width = 5, fig.height = 3, fig.align = 'center', message = F, warning = F}
 # load relevant packages
-library(UsingR); data(galton); library(ggplot2)
+p_load("UsingR")
+data(galton)
+p_load("ggplot2")
 # plot galton data
 g <- ggplot(galton, aes(x = child))
 # add histogram for children data
@@ -440,7 +444,8 @@ sd(apply(matrix(sample(0 : 1, nosim * n, replace = TRUE), nosim), 1, mean))
 
 ```{r fig.width = 4, fig.height = 3, fig.align = 'center', message = F, warning = F}
 # load data
-library(UsingR); data(father.son);
+p_load("UsingR")
+data(father.son);
 # define son height as the x variable
 x <- father.son$sheight
 # n is the length
@@ -612,7 +617,7 @@ $\pagebreak$
 
 ```{r fig.width = 6, fig.height = 3, fig.align = 'center', message = F, warning = F}
 # load library
-library(gridExtra)
+p_load("gridExtra")
 # specify number of trials
 n <- 10000
 # calculate sample (from normal distribution) means for different size of n
@@ -1108,7 +1113,7 @@ $\pagebreak$
         * Power increases as **n** increases $\rightarrow$ with more data, more likely to detect any alternative $mu_a$
 
 ```{r, fig.align='center', fig.height=4, fig.width=6}
-library(ggplot2)
+p_load("ggplot2")
 mu0 = 30; mua = 32; sigma = 4; n = 16
 alpha = 0.05
 z = qnorm(1 - alpha)
@@ -1120,7 +1125,7 @@ power = sapply(nseq, function(n)
     )
 colnames(power) <- paste("n", nseq, sep = "")
 d <- data.frame(mu_a, power)
-library(reshape2)
+p_load("reshape2")
 d2 <- melt(d, id.vars = "mu_a")
 names(d2) <- c("mu_a", "n", "power")
 g <- ggplot(d2,
@@ -1265,7 +1270,8 @@ $\pagebreak$
 
 ```{r fig.align='center', fig.height=4, fig.width=6, message = F, warning = F}
 # load data
-library(UsingR); data(father.son)
+p_load("UsingR")
+data(father.son)
 # observed dataset
 x <- father.son$sheight
 # number of simulated statistic

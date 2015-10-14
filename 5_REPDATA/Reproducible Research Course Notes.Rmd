@@ -2,13 +2,13 @@
 title: "Reproducible Research Course Notes"
 author: "Xing Su"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: 3
   html_document:
     highlight: pygments
     theme: spacelab
     toc: yes
+  pdf_document:
+    toc: yes
+    toc_depth: 3
 header-includes: \usepackage{graphicx}
 ---
 $\pagebreak$
@@ -31,8 +31,8 @@ $\pagebreak$
 
 ```{r fig.height = 5, fig.width = 7, fig.align='center', echo=FALSE}
 # install grid and png packages if not present
-library(png)
-library(grid)
+if (!require("pacman")) install.packages("pacman")
+p_load("png", "grid")
 grid.raster(readPNG("figures/1.jpg"))
 ```
 
@@ -127,8 +127,8 @@ grid.raster(readPNG("figures/1.jpg"))
 * for the purpose of the SPAM question, data needs to be split into training and test test (Predictive)
 
 ```{r warning = F}
-# If it isn't installed, install the kernlab package with install.packages()
-library(kernlab)
+# If it isn't installed, install the kernlab package with p_load()
+p_load("kernlab")
 data(spam)
 set.seed(3435)
 trainIndicator = rbinom(4601, size = 1, prob = 0.5)
@@ -174,7 +174,7 @@ grid.raster(readPNG("figures/3.jpg"))
 trainSpam$numType = as.numeric(trainSpam$type) - 1
 costFunction = function(x, y) sum(x != (y > 0.5))
 cvError = rep(NA, 55)
-library(boot)
+p_load("boot")
 for (i in 1:55) {
     # creates formula with one variable and the result
     lmFormula = reformulate(names(trainSpam)[i], response = "numType")
@@ -363,8 +363,8 @@ $\pagebreak$
 		* `xtable`prints the table in html format, which is better presented than plain text normally
 
 ```{r showtable, results = "asis", fig.align = 'center'}
-library(datasets)
-library(xtable)
+p_load("datasets")
+p_load("xtable")
 fit <- lm(Ozone ~ Wind + Temp + Solar.R, data = airquality)
 xt <- xtable(summary(fit))
 print(xt, "html")
@@ -390,7 +390,7 @@ print(xt, "html")
 	* alternatively, when not in RStudio, the process can be accomplished through the following
 
 ```r
-library(knitr)
+p_load("knitr")
 setwd(<working directory>)
 knit2html("document.Rmd")
 browseURL("document.html")
@@ -643,7 +643,7 @@ grid.raster(readPNG("figures/4.png"))
 * ***example***
 
 ```r
-library(cacher)
+p_load("cacher")
 clonecache(id = "092dcc7dda4b93e42f23e038a60e1d44dbec7b3f")
 clonecache(id = "092d")  ## effectively the same as above
 # output: created cache directory '.cache'
