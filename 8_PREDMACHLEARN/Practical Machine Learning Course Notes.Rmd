@@ -2,13 +2,13 @@
 title: "Practical Machine Learning Course Notes"
 author: "Xing Su"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: 3
   html_document:
     highlight: pygments
     theme: spacelab
     toc: yes
+  pdf_document:
+    toc: yes
+    toc_depth: 3
 header-includes: \usepackage{graphicx} \usepackage{mathtools}
 ---
 
@@ -22,8 +22,11 @@ $\pagebreak$
 	- ***Note**: choosing the right dataset and knowing what the specific question is are paramount to the success of the prediction algorithm (GoogleFlu failed to predict accurately when people's search habits changed) *
 
 ```{r fig.width = 4, fig.height = 3, fig.align = 'center', echo = FALSE, message = FALSE}
-library(png);library(grid)
-library(doMC); registerDoMC(cores = 4)
+# install grid and png packages if not present
+if (!require("pacman")) install.packages("pacman")
+p_load("png", "grid")
+p_load("doMC")
+registerDoMC(cores = 4)
 grid.raster(readPNG("figures/1.png"))
 ```
 
@@ -65,7 +68,8 @@ grid.raster(readPNG("figures/1.png"))
 
 ```{r message = FALSE, fig.width = 3, fig.height = 3, fig.align = 'center'}
 # load data
-library(kernlab); data(spam); set.seed(333)
+p_load("kernlab")
+data(spam); set.seed(333)
 # picking a small subset (10 values) from spam data set
 smallSpam <- spam[sample(dim(spam)[1],size=10),]
 # label spam = 2 and ham = 1
@@ -352,7 +356,7 @@ grid.raster(readPNG("figures/13.png"))
 
 ```{r message = FALSE}
 # load packages and data
-library(caret)
+p_load("caret")
 # create training set indexes with 75% of data
 inTrain <- createDataPartition(y=spam$type,p=0.75, list=FALSE)
 # subset spam data to training
@@ -487,7 +491,7 @@ args(trainControl)
 
 ```{r fig.width = 5, fig.height = 5, fig.align = 'center'}
 # load relevant libraries
-library(ISLR); library(ggplot2);
+p_load("ISLR", "ggplot2")
 # load wage data
 data(Wage)
 # create training and test sets
@@ -508,15 +512,15 @@ qplot(age,wage,colour=education,data=training)+geom_smooth(method='lm',formula=y
 ```
 
 * `cut2(variable, g=3)` = creates a new factor variable by cutting the specified variable into n groups (3 in this case) based on percentiles
-	- ***Note**: `cut2` function is part of the `Hmisc` package, so `library(Hmisc)` must be run first *
+	- ***Note**: `cut2` function is part of the `Hmisc` package, so `p_load("Hmisc")` must be run first *
 	- this variable can then be used to tabulate/plot the data
 * `grid.arrange(p1, p2, ncol=2)` = `ggplot2` function the print multiple graphs on the same plot
-	- ***Note**: `grid.arrange` function is part of the `gridExtra` package, so `library(gridExtra)` must be run first *
+	- ***Note**: `grid.arrange` function is part of the `gridExtra` package, so `p_load("gridExtra")` must be run first *
 
 ```{r fig.width = 7, fig.height = 3, fig.align = 'center', message = FALSE}
 # load Hmisc and gridExtra packages
-library(Hmisc);library(gridExtra);
-# cute the wage variable
+p_load("Hmisc", "gridExtra")
+# cut the wage variable
 cutWage <- cut2(training$wage,g=3)
 # plot the boxplot
 p1 <- qplot(cutWage,age, data=training,fill=cutWage,
@@ -595,6 +599,7 @@ rbind(train = c(mean = mean(trainCapAveS), std = sd(trainCapAveS)),
 
 ```{r message = FALSE, fig.width = 5, fig.height = 3, fig.align = 'center'}
 # set up BoxCox transforms
+p_load("e1071")
 preObj <- preProcess(training[,-58],method=c("BoxCox"))
 # perform preprocessing on training data
 trainCapAveS <- predict(preObj,training[,-58])$capitalAve
@@ -610,6 +615,7 @@ par(mfrow=c(1,2)); hist(trainCapAveS); qqnorm(trainCapAveS)
 
 ```{r message = FALSE}
 # Make some values NA
+p_load("RANN")
 training$capAve <- training$capitalAve
 selectNA <- rbinom(dim(training)[1],size=1,prob=0.05)==1
 training$capAve[selectNA] <- NA
@@ -691,7 +697,7 @@ nearZeroVar(training,saveMetrics=TRUE)
 
 ```{r fig.width = 4, fig.height = 3, fig.align = 'center'}
 # load splines package
-library(splines)
+p_load("splines")
 # create polynomial function
 bsBasis <- bs(training$age,df=3)
 # fit the outcome on the three polynomial terms
@@ -767,6 +773,7 @@ plot(prComp$x[,1],prComp$x[,2],col=typeColor,xlab="PC1",ylab="PC2")
 
 ```{r message = FALSE, warning = FALSE, fig.width = 4, fig.height = 3, fig.align = 'center'}
 # create train and test sets
+p_load("caret")
 inTrain <- createDataPartition(y=spam$type,p=0.75, list=FALSE)
 training <- spam[inTrain,]
 testing <- spam[-inTrain,]
@@ -775,7 +782,8 @@ preProc <- preProcess(log10(training[,-58]+1),method="pca",pcaComp=2)
 # calculate PCs for training data
 trainPC <- predict(preProc,log10(training[,-58]+1))
 # run model on outcome and principle components
-modelFit <- train(training$type ~ .,method="glm",data=trainPC)
+modelFit <- train(training$type ~.,data=trainPC,method="glm")
+
 # calculate PCs for test data
 testPC <- predict(preProc,log10(testing[,-58]+1))
 # compare results
@@ -1003,6 +1011,15 @@ modFit <- train(Species ~ .,method="rpart",data=training)
 # print the classification tree
 print(modFit$finalModel)
 # plot the classification tree
+# Note: Need to install Gtk+ 2.x before using rattle. On OS/X:
+# brew install gtk+
+# I should just need to run the following:
+#p_load("rattle")
+# But I actually need to run this, because apparently the dependencies aren't loading:
+p_load("RGtk2")
+p_load("rpart")
+p_load("rpart.plot")
+p_load("rattle")
 rattle::fancyRpartPlot(modFit$finalModel)
 # predict on test values
 predict(modFit,newdata=testing)
@@ -1024,7 +1041,8 @@ predict(modFit,newdata=testing)
 
 ```{r fig.width = 5, fig.height = 4, fig.align = 'center', message = FALSE, warning = FALSE, cache = FALSE}
 # load data
-library(ElemStatLearn); data(ozone,package="ElemStatLearn")
+p_load("ElemStatLearn")
+data(ozone,package="ElemStatLearn")
 # reorder rows based on ozone variable
 ozone <- ozone[order(ozone$ozone),]
 # create empty matrix
@@ -1065,7 +1083,8 @@ lines(1:155,apply(ll,2,mean),col="red",lwd=2)
 
 ```{r fig.width = 5, fig.height = 4, fig.align = 'center', message = FALSE, warning = FALSE, cache = FALSE}
 # load relevant package and data
-library(party); data(ozone,package="ElemStatLearn")
+p_load("party")
+data(ozone,package="ElemStatLearn")
 # reorder rows based on ozone variable
 ozone <- ozone[order(ozone$ozone),]
 # extract predictors
@@ -1128,6 +1147,7 @@ grid.raster(readPNG("figures/14.png"))
 * ***example***
 
 ```{r fig.width = 5, fig.height = 3, fig.align = 'center', message = FALSE, warning = FALSE, cache = FALSE}
+p_load("randomForest")
 # load data
 data(iris)
 # create train/test data sets
@@ -1208,6 +1228,7 @@ grid.raster(readPNG("figures/18.png"))
 * ***example***
 
 ```{r message = FALSE, warning = FALSE, cache = FALSE}
+p_load("gbm")
 # load data
 data(Wage)
 # remove log wage variable (we are trying to predict wage)
@@ -1321,6 +1342,7 @@ pred.lda
 	- ***example: `caret` package***
 
 ```{r message = F, warning = F}
+p_load("klaR")
 # using the same data from iris, run naive Bayes on training data
 nb <- train(Species ~ ., data=training,method="nb")
 # predict test outcomes using naive Bayes model
@@ -1541,7 +1563,7 @@ lm(lpsa ~ .,data =small)
 
 ```{r echo = FALSE, fig.width = 5, fig.height = 5, fig.align = 'center', message = FALSE, warning = FALSE}
 # load MASS library for lm.ridge function
-library(MASS)
+p_load("MASS")
 # we will run the models for 10 different values from 0 to 50
 lambdas <- seq(0,50,len=10)
 # create empty vectors for training and test residual sum squares
@@ -1640,7 +1662,7 @@ legend("topright",covnames,pch=as.character(1:8), cex = 0.5)
 
 ```{r fig.width = 5, fig.height = 5, fig.align = 'center', message = F, warning = F, results = 'hide'}
 # load lars package
-library(lars)
+p_load("lars")
 # perform lasso regression
 lasso.fit <- lars(as.matrix(x), y, type="lasso", trace=TRUE)
 # plot lasso regression model
@@ -1820,7 +1842,7 @@ $\pagebreak$
 
 ```{r fig.width = 5, fig.height = 4.5, fig.align = 'center', message = FALSE, warning = FALSE, cache = FALSE}
 # load quantmod package
-library(quantmod);
+p_load("quantmod");
 # specify to and from dates
 from.dat <- as.Date("01/01/00", format="%m/%d/%y")
 to.dat <- as.Date("3/2/15", format="%m/%d/%y")
@@ -1838,7 +1860,7 @@ plot(decompose(ts),xlab="Years")
 
 ```{r fig.width = 5, fig.height = 3.5, fig.align = 'center', message = FALSE, warning = FALSE}
 # load forecast library
-library(forecast)
+p_load("forecast")
 # find the number of rows (years)
 rows <- ceiling(length(ts)/12)
 # use 90% of the data to create training set
